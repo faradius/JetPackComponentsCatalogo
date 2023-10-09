@@ -9,8 +9,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -54,7 +58,12 @@ class MainActivity : ComponentActivity() {
                         MyTextFieldOutlined()
                     }*/
 
-                    MyProgress()
+                    val myOptions = getOptions(listOf("Opción 1", "Configuraciones", "Vistas"))
+                    Column {
+                        myOptions.forEach{
+                            MyCheckBoxWithTextCompleted(it)
+                        }
+                    }
 
                 }
             }
@@ -62,16 +71,145 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun getOptions(titles:List<String>): List<CheckInfo>{
+    //El map recorre la lista y devuelve un valor, en este caso un elemento de la lista
+    return titles.map {
+
+        var status by rememberSaveable { mutableStateOf(false) }
+
+        CheckInfo(
+            title = it,
+            selected = status,
+            onCheckedChange = {myNewStatus ->
+                status = myNewStatus
+            }
+        )
+    }
+
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     JetPackComponentsCatalogoTheme {
-        MyProgress()
+        MyCheckBoxWithText()
+    }
+}
+
+
+@Composable
+fun MyCheckBoxWithTextCompleted(checkInfo: CheckInfo) {
+
+    Row(Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Checkbox(checked = checkInfo.selected, onCheckedChange = { checkInfo.onCheckedChange(!checkInfo.selected) })
+        Text(text = checkInfo.title)
     }
 }
 
 @Composable
+fun MyCheckBoxWithText() {
+    var state by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    Row(Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Checkbox(checked = state, onCheckedChange = { state = !state })
+        Text(text = "Ejemplo 1")
+    }
+}
+
+@Composable
+fun MyCheckBox() {
+    var state by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    Checkbox(
+        checked = state, onCheckedChange = { state = !state },
+        enabled = true,
+        colors = CheckboxDefaults.colors(
+            checkedColor = Color.Red,
+            uncheckedColor = Color.Green,
+            checkmarkColor = Color.Blue
+        )
+    )
+}
+
+@Composable
+fun MySwitch() {
+    var state by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    Switch(
+        checked = state,
+        onCheckedChange = { state = !state },
+        enabled = false,
+        colors = SwitchDefaults.colors(
+            uncheckedThumbColor = Color.Red,
+            uncheckedTrackColor = Color.Magenta,
+            checkedThumbColor = Color.Green,
+            checkedTrackColor = Color.Cyan,
+            checkedTrackAlpha = 0.1f,
+            uncheckedTrackAlpha = 0.1f,
+            disabledCheckedTrackColor = Color.Yellow,
+            disabledCheckedThumbColor = Color.Yellow,
+            disabledUncheckedThumbColor = Color.Yellow,
+            disabledUncheckedTrackColor = Color.Yellow
+        )
+    )
+
+
+}
+
+@Composable
+fun MyProgressAdvance() {
+
+    var progressStatus by rememberSaveable {
+        mutableStateOf(0f)
+    }
+
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        LinearProgressIndicator(progress = progressStatus)
+
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+
+            Button(onClick = {
+                progressStatus -= 0.1f
+                if (progressStatus < 0f) {
+                    progressStatus = 0f
+                }
+            }) {
+                Text(text = "Reducir")
+            }
+
+            Button(onClick = {
+                if (progressStatus < 1.0f) {
+                    progressStatus += 0.1f
+                }
+            }) {
+                Text(text = "Incrementar")
+            }
+        }
+    }
+}
+
+
+@Composable
 fun MyProgress() {
+
+    var showLoading by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     Column(
         Modifier
             .padding(24.dp)
@@ -79,8 +217,18 @@ fun MyProgress() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressIndicator(color = Color.Red, strokeWidth = 10.dp)
-        LinearProgressIndicator(modifier = Modifier.padding(top = 16.dp), color = Color.Red, backgroundColor = Color.Green)
+        if (showLoading) {
+            CircularProgressIndicator(color = Color.Red, strokeWidth = 10.dp)
+            LinearProgressIndicator(
+                modifier = Modifier.padding(top = 16.dp),
+                color = Color.Red,
+                backgroundColor = Color.Green
+            )
+        }
+
+        Button(onClick = { showLoading = !showLoading }) {
+            Text(text = "Cargar Perfil")
+        }
     }
 }
 
