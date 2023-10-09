@@ -7,7 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -61,11 +64,14 @@ class MainActivity : ComponentActivity() {
 
                     val myOptions = getOptions(listOf("Opción 1", "Configuraciones", "Vistas"))
                     Column {
-                        var selected by remember{
+
+                        MyDropDownMenu()
+
+                        /*var selected by remember{
                             mutableStateOf("Aris")
                         }
 
-                        MyRadioButtonList(selected){selected = it}
+                        MyRadioButtonList(selected){selected = it}*/
 
 //                        MyTriStatusCheckBox()
 //                        myOptions.forEach {
@@ -83,12 +89,91 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     JetPackComponentsCatalogoTheme {
-//        MyRadioButtonList()
+        MyDivider()
     }
 }
 
 @Composable
-fun MyRadioButtonList(name:String, onItemSelected:(String) ->Unit){
+fun MyDropDownMenu() {
+    var expanded by remember { mutableStateOf(false) }
+    val desserts = listOf("Helado", "Chocolate", "Cafe", "Fruta", "Natillas", "Chilaquiles")
+    var selectedText by remember { mutableStateOf(desserts[0]) }
+
+    Column(Modifier.padding(20.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { selectedText = it },
+            enabled = false,
+            readOnly = true,
+            modifier = Modifier
+                .clickable { expanded = true }
+                .fillMaxWidth()
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            desserts.forEach { dessert ->
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    selectedText = dessert
+                }) {
+                    Text(text = dessert)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MyDivider() {
+    Divider(
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp), color = Color.Red
+    )
+}
+
+@Composable
+fun MyBadgeBox() {
+    Column() {
+        BadgedBox(modifier = Modifier.padding(16.dp),
+            badge = {
+                Badge(backgroundColor = Color.Red, contentColor = Color.White) {
+                    Text("200")
+                }
+
+            },
+            content = {
+                Icon(imageVector = Icons.Default.Star, contentDescription = "estrella")
+            })
+    }
+}
+
+@Composable
+fun MyCard() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        elevation = 12.dp,
+        shape = MaterialTheme.shapes.small,
+        backgroundColor = Color.Red,
+        contentColor = Color.Green,
+        border = BorderStroke(5.dp, Color.Green)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Ejemplo 1")
+            Text(text = "Ejemplo 2")
+            Text(text = "Ejemplo 3")
+        }
+    }
+}
+
+@Composable
+fun MyRadioButtonList(name: String, onItemSelected: (String) -> Unit) {
 
     Column() {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -118,7 +203,7 @@ fun MyRadioButton() {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         RadioButton(
             selected = false,
-            onClick = {  },
+            onClick = { },
             enabled = true,
             colors = RadioButtonDefaults.colors(
                 selectedColor = Color.Red,
@@ -126,7 +211,7 @@ fun MyRadioButton() {
                 disabledColor = Color.Green
             )
         )
-        
+
         Text(text = "Ejemplo 1")
     }
 }
