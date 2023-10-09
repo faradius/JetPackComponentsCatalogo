@@ -61,10 +61,16 @@ class MainActivity : ComponentActivity() {
 
                     val myOptions = getOptions(listOf("Opción 1", "Configuraciones", "Vistas"))
                     Column {
-                        MyTriStatusCheckBox()
-                        myOptions.forEach{
-                            MyCheckBoxWithTextCompleted(it)
+                        var selected by remember{
+                            mutableStateOf("Aris")
                         }
+
+                        MyRadioButtonList(selected){selected = it}
+
+//                        MyTriStatusCheckBox()
+//                        myOptions.forEach {
+//                            MyCheckBoxWithTextCompleted(it)
+//                        }
                     }
 
                 }
@@ -73,15 +79,68 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-fun MyTriStatusCheckBox(){
+fun DefaultPreview() {
+    JetPackComponentsCatalogoTheme {
+//        MyRadioButtonList()
+    }
+}
+
+@Composable
+fun MyRadioButtonList(name:String, onItemSelected:(String) ->Unit){
+
+    Column() {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            RadioButton(selected = name == "Aris", onClick = { onItemSelected("Aris") })
+            Text(text = "Aris")
+        }
+
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            RadioButton(selected = name == "David", onClick = { onItemSelected("David") })
+            Text(text = "David")
+        }
+
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            RadioButton(selected = name == "Fulanito", onClick = { onItemSelected("Fulanito") })
+            Text(text = "Fulanito")
+        }
+
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            RadioButton(selected = name == "Pepe", onClick = { onItemSelected("Pepe") })
+            Text(text = "Pepe")
+        }
+    }
+}
+
+@Composable
+fun MyRadioButton() {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        RadioButton(
+            selected = false,
+            onClick = {  },
+            enabled = true,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color.Red,
+                unselectedColor = Color.Blue,
+                disabledColor = Color.Green
+            )
+        )
+        
+        Text(text = "Ejemplo 1")
+    }
+}
+
+@Composable
+fun MyTriStatusCheckBox() {
     var status by rememberSaveable { mutableStateOf(ToggleableState.Off) }
 
     TriStateCheckbox(state = status, onClick = {
-        status = when (status){
-            ToggleableState.On->{
+        status = when (status) {
+            ToggleableState.On -> {
                 ToggleableState.Off
             }
+
             ToggleableState.Off -> ToggleableState.Indeterminate
             ToggleableState.Indeterminate -> ToggleableState.On
         }
@@ -89,7 +148,7 @@ fun MyTriStatusCheckBox(){
 }
 
 @Composable
-fun getOptions(titles:List<String>): List<CheckInfo>{
+fun getOptions(titles: List<String>): List<CheckInfo> {
     //El map recorre la lista y devuelve un valor, en este caso un elemento de la lista
     return titles.map {
 
@@ -98,7 +157,7 @@ fun getOptions(titles:List<String>): List<CheckInfo>{
         CheckInfo(
             title = it,
             selected = status,
-            onCheckedChange = {myNewStatus ->
+            onCheckedChange = { myNewStatus ->
                 status = myNewStatus
             }
         )
@@ -106,20 +165,13 @@ fun getOptions(titles:List<String>): List<CheckInfo>{
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    JetPackComponentsCatalogoTheme {
-        MyTriStatusCheckBox()
-    }
-}
-
-
 @Composable
 fun MyCheckBoxWithTextCompleted(checkInfo: CheckInfo) {
 
     Row(Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Checkbox(checked = checkInfo.selected, onCheckedChange = { checkInfo.onCheckedChange(!checkInfo.selected) })
+        Checkbox(
+            checked = checkInfo.selected,
+            onCheckedChange = { checkInfo.onCheckedChange(!checkInfo.selected) })
         Text(text = checkInfo.title)
     }
 }
