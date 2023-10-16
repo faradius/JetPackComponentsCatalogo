@@ -1,7 +1,6 @@
 package com.alex.jetpackcomponentscatalogo
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -12,13 +11,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -55,6 +51,23 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
+                    
+                    var show by remember { mutableStateOf(false) }
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                        Button(onClick = {show = true}) {
+                            Text(text = "Mostrar diálogo")
+                        }
+                        MyConfirmationDialog(
+                            show = show,
+                            onDimiss = {show = false}
+                        )
+                        /*MyDialog(
+                            show = show,
+                            onDimiss = {show = false},
+                            onConfirm = {Log.i("Alex", "Click aqui")}
+                        )*/
+                    }
+                    
                     /*var myText by remember { mutableStateOf("Aris") }
                     MyTextField(myText,{myText = it})*/
 
@@ -62,22 +75,22 @@ class MainActivity : ComponentActivity() {
                         MyTextFieldOutlined()
                     }*/
 
-                    val myOptions = getOptions(listOf("Opción 1", "Configuraciones", "Vistas"))
-                    Column {
-
-                        MyDropDownMenu()
-
-                        /*var selected by remember{
-                            mutableStateOf("Aris")
-                        }
-
-                        MyRadioButtonList(selected){selected = it}*/
-
-//                        MyTriStatusCheckBox()
-//                        myOptions.forEach {
-//                            MyCheckBoxWithTextCompleted(it)
+//                    val myOptions = getOptions(listOf("Opción 1", "Configuraciones", "Vistas"))
+//                    Column {
+//
+//                        MyDialog()
+//
+//                        /*var selected by remember{
+//                            mutableStateOf("Aris")
 //                        }
-                    }
+//
+//                        MyRadioButtonList(selected){selected = it}*/
+//
+////                        MyTriStatusCheckBox()
+////                        myOptions.forEach {
+////                            MyCheckBoxWithTextCompleted(it)
+////                        }
+//                    }
 
                 }
             }
