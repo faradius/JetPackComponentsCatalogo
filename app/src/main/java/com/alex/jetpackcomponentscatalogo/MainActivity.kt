@@ -51,8 +51,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
+                    ScaffoldExample()
                     
-                    var show by remember { mutableStateOf(false) }
+                    /*var show by remember { mutableStateOf(false) }
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                         Button(onClick = {show = true}) {
                             Text(text = "Mostrar diálogo")
@@ -61,12 +62,12 @@ class MainActivity : ComponentActivity() {
                             show = show,
                             onDimiss = {show = false}
                         )
-                        /*MyDialog(
+                        *//*MyDialog(
                             show = show,
                             onDimiss = {show = false},
                             onConfirm = {Log.i("Alex", "Click aqui")}
-                        )*/
-                    }
+                        )*//*
+                    }*/
                     
                     /*var myText by remember { mutableStateOf("Aris") }
                     MyTextField(myText,{myText = it})*/
