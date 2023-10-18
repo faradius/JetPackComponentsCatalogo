@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
-                    ScaffoldExample()
+                    SuperHeroStickyView()
                     
                     /*var show by remember { mutableStateOf(false) }
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
