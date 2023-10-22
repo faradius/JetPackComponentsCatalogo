@@ -72,6 +72,17 @@ class MainActivity : ComponentActivity() {
                                 backStackEntry.arguments?.getInt("age") ?: 0
                             )
                         }
+
+                        composable(
+                            Routes.Pantalla5.route,
+                            arguments = listOf(navArgument("name") { defaultValue = "pepe" })
+                        ) {
+                                backStackEntry ->
+                            Screen5(
+                                navigationController,
+                                backStackEntry.arguments?.getString("name")
+                            )
+                        }
                     }
 //                    SuperHeroStickyView()
 
