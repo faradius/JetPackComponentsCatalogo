@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +37,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.alex.jetpackcomponentscatalogo.model.Routes
 import com.alex.jetpackcomponentscatalogo.ui.theme.JetPackComponentsCatalogoTheme
 
 class MainActivity : ComponentActivity() {
@@ -50,9 +55,26 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    val navigationController = rememberNavController()
+                    NavHost(
+                        navController = navigationController,
+                        startDestination = Routes.Pantalla1.route
+                    ) {
+                        composable(Routes.Pantalla1.route) { Screen1(navigationController) }
+                        composable(Routes.Pantalla2.route) { Screen2(navigationController) }
+                        composable(Routes.Pantalla3.route) { Screen3(navigationController) }
+                        composable(
+                            "pantalla4/{name}",
+                            arguments = listOf(navArgument("name") { type = NavType.IntType })
+                        ) { backStackEntry ->
+                            Screen4(
+                                navigationController,
+                                backStackEntry.arguments?.getInt("name") ?: 0
+                            )
+                        }
+                    }
+//                    SuperHeroStickyView()
 
-                    SuperHeroStickyView()
-                    
                     /*var show by remember { mutableStateOf(false) }
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                         Button(onClick = {show = true}) {
@@ -68,7 +90,7 @@ class MainActivity : ComponentActivity() {
                             onConfirm = {Log.i("Alex", "Click aqui")}
                         )*//*
                     }*/
-                    
+
                     /*var myText by remember { mutableStateOf("Aris") }
                     MyTextField(myText,{myText = it})*/
 
