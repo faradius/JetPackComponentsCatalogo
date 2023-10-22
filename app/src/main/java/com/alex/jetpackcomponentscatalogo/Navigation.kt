@@ -41,17 +41,17 @@ fun Screen3(navigationController: NavHostController) {
             .fillMaxSize()
             .background(Color.Magenta)
     ){
-        Text(text = "Pantalla 3", modifier = Modifier.align(Alignment.Center).clickable { navigationController.navigate("pantalla4/2") })
+        Text(text = "Pantalla 3", modifier = Modifier.align(Alignment.Center).clickable { navigationController.navigate(Routes.Pantalla4.createRoute(525)) })
     }
 }
 
 @Composable
-fun Screen4(navigationController: NavHostController, name:Int) {
+fun Screen4(navigationController: NavHostController, age:Int) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.LightGray)
     ){
-        Text(text = name.toString(), modifier = Modifier.align(Alignment.Center))
+        Text(text = "Tengo $age años", modifier = Modifier.align(Alignment.Center))
     }
 }
